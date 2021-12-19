@@ -18,6 +18,7 @@ from flask_compress import Compress
 from flask_socketio import SocketIO
 from time import sleep
 from collections import deque
+
 import psycopg2
 
 from flaskext.markdown import Markdown
@@ -91,9 +92,7 @@ app.config["SITE_COLOR"]=environ.get("SITE_COLOR", "805ad5").lstrip().rstrip()
 app.config["RUQQUSPATH"]=environ.get("RUQQUSPATH", os.path.dirname(os.path.realpath(__file__)))
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['DATABASE_URL'] = environ.get(
-    "DATABASE_CONNECTION_POOL_URL",
-    environ.get("DATABASE_URL"))
+app.config['DATABASE_URL'] = 'postgres://postgres:potato123@localhost:5432/postgres'
 
 app.config['SQLALCHEMY_READ_URIS'] = [
     environ.get("DATABASE_CONNECTION_READ_01_URL"),
