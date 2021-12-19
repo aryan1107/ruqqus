@@ -1,13 +1,16 @@
 #!/bin/bash
-cd ~/
-sudo cp ruqqus/nginx.txt /etc/nginx/sites-available/ruqqus.com.conf
+
+set -x
+
+cd $HOME
+sudo cp $HOME/Desktop/ruqqus/nginx.txt /etc/nginx/sites-available/ruqqus.com.conf
 sudo nginx -s reload
-. ~/venv/bin/activate
-. ~/env.sh
-cd ~/ruqqus
+. $HOME/Desktop/ruqqus/venv/bin/activate
+. $HOME/Desktop/ruqqus/env.sh
+cd $HOME/Desktop/ruqqus
 pip3 install -r requirements.txt
-export PYTHONPATH=$PYTHONPATH:~/ruqqus
-cd ~/
+export PYTHONPATH=$PYTHONPATH:$HOME/Desktop/ruqqus
+cd $HOME
 
 #echo "starting background worker"
 #python ruqqus/scripts/recomputes.py
@@ -16,4 +19,4 @@ cd ~/
 #gunicorn ruqqus.__main__:app load_chat -k eventlet  -w 1 --worker-connections 1000 --max-requests 1000000 --preload --bind 127.0.0.1:5001 -D
 
 echo "starting regular workers"
-NEW_RELIC_CONFIG_FILE=newrelic.ini newrelic-admin run-program gunicorn ruqqus.__main__:app -k gevent -w $WEB_CONCURRENCY --worker-connections $WORKER_CONNECTIONS --preload --max-requests 10000 --max-requests-jitter 500 --bind 127.0.0.1:5000
+gunicorn ruqqus.__main__:app -k gevent -w $WEB_CONCURRENCY --worker-connections $WORKER_CONNECTIONS --preload --max-requests 10000 --max-requests-jitter 500 --bind 127.0.0.1:5000
